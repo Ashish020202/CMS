@@ -1,0 +1,198 @@
+{
+    "importantInformation": {
+      "title": "Important Information",
+      "notes": [
+        {
+          "label": "Traveling to the United States",
+          "details": [
+            {
+              "description": "Who can travel?",
+              "info": "All fully vaccinated travelers are allowed to enter the country. All WHO-approved vaccines, including Covishield and Covaxin, are accepted by the USA."
+            },
+            {
+              "description": "Destination restrictions:",
+              "info": "Non-vaccinated travelers from India cannot enter. Any traveler transiting via EU/UK cannot enter the USA."
+            },
+            {
+              "description": "Additional Note",
+              "info": "Insipidity the sufficient discretion imprudence resolution sir him decisively. Proceed how any engaged visitor."
+            },
+            {
+              "description": "Propriety Explained",
+              "info": "Explained propriety off out perpetual his you. Feel sold off felt nay rose met you. We so entreaties cultivated astonished is."
+            },
+            {
+              "description": "Sister Note",
+              "info": "Was sister for a few longer Mrs sudden talent become. Done may bore quit evil old mile. If likely am of beauty tastes."
+            }
+          ]
+        },
+        {
+          "label": "A Note on Guidelines",
+          "details": [
+            {
+              "info": "While we do our best to get you the latest information, due to the rapidly evolving nature of current events, sometimes that is not possible. Please note, it is the sole responsibility of the passenger to ensure his or her eligibility to enter the destination or transit countries (as applicable). We accept no liability in this regard. Please check the travel rules of all regulatory websites before to booking as well as commencing."
+            }
+          ]
+        }
+      ]
+    },
+    "travelerDetails": {
+      "title": "Traveler Details",
+      "instructions": "Please make sure you enter the Name as per your passport",
+      "buttonLabel": "Add New Adult",
+      "accordionItems": [
+        {
+          "header": "Adult 1",
+          "formFields": {
+            "title": {
+              "label": "Title",
+              "options": ["Select Title", "Mr", "Mrs"]
+            },
+            "fullName": {
+              "label": "Full name",
+              "fields": [
+                {
+                  "name": "firstName",
+                  "placeholder": "First Name"
+                },
+                {
+                  "name": "lastName",
+                  "placeholder": "Last Name"
+                }
+              ]
+            },
+            "dateOfBirth": {
+              "label": "Date Of Birth",
+              "dateFields": [
+                {
+                  "label": "Date",
+                  "options": ""
+                },
+                {
+                  "label": "Month",
+                  "options": ["Select Month", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+                },
+                {
+                  "label": "Year",
+                  "options": ""
+                }
+              ]
+            },
+            "nationality": {
+              "label": "Nationality",
+              "options": ["Select Nationality", "Indian", "Mali", "Japan", "Jordan"]
+            },
+            "passport": {
+              "numberLabel": "Passport Number",
+              "issuingCountry": {
+                "label": "Passport Issuing Country",
+                "options": ["Select Country", "India", "Canada", "Japan", "China"]
+              },
+              "expiry": {
+                "label": "Passport Expiry",
+                "placeholder": "Enter passport date"
+              }
+            }
+          }
+        },
+        {
+          "header": "Adult 2",
+          "description": "What deal evil rent by real in. But her ready least set lived spite solid. September how men saw tolerably two behavior arranging. She offices for highest and replied one venture pasture."
+        }
+      ],
+      "bookingDetails": {
+        "instructions": "Booking detail will be sent to",
+        "fields": [
+          {
+            "name": "mobileNo",
+            "label": "Mobile Number",
+            "placeholder": "Enter your mobile number"
+          },
+          {
+            "name": "email",
+            "label": "Email Address",
+            "placeholder": "Enter your email address"
+          }
+        ],
+        "submitButton": {
+          "label": "Proceed To Payment"
+        }
+      }
+    },
+    "fareSummary": {
+      "title": "Fare Summary",
+      "items": [
+        {
+          "label": "Base Fare",
+          "value": "{currency}38,660",
+          "info": "COVID-19 test required Vaccinated travelers can visit"
+        },
+        {
+          "label": "Discount",
+          "value": "+{currency}2,560"
+        },
+        {
+          "label": "Other Services",
+          "value": "{currency}20"
+        }
+      ],
+      "totalFare": "{currency}36,500"
+    },
+    "offerAndDiscounts": {
+      "title": "Offer & Discount",
+      "inputPlaceholder": "Coupon code",
+      "buttonLabel": "Apply"
+    },
+    "cancellationCharges": {
+      "title": "Cancellation & Date Change Charges",
+      "nonRefundableLabel": "Non Refundable",
+      "description": "The Cancellation penalty on this booking will depend on how close to the departure date you cancel your ticket. View fare rules to know more.",
+      "modal": {
+        "title": "Cancellation & Date Change Charges",
+        "tabs": {
+          "cancellationCharge": {
+            "route": "BOM - CDG",
+            "table": {
+              "caption": "*From The Date Of Departure",
+              "headers": [
+                "Time Frame",
+                "Air Free + MMT Free"
+              ],
+              "rows": [
+                {
+                  "timeFrame": "0 hours to 24 hours",
+                  "charge": "Non Refundable"
+                },
+                {
+                  "timeFrame": "24 hours to 365 days",
+                  "charge": "{currency}16,325 + {currency}250"
+                }
+              ]
+            }
+          },
+          "dateChangeCharge": {
+            "route": "JFK - BOM",
+            "table": {
+              "caption": "*From The Date Of Departure",
+              "headers": [
+                "Time Frame",
+                "Air Free + MMT Free + Fare Difference"
+              ],
+              "rows": [
+                {
+                  "timeFrame": "0 hours to 24 hours",
+                  "charge": "Non Refundable"
+                },
+                {
+                  "timeFrame": "24 hours to 365 days",
+                  "charge": "{currency}16,325 + {currency}250 + Fare Difference"
+                }
+              ]
+            }
+          }
+        }
+      }
+    }
+  }
+  

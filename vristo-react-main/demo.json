@@ -1,0 +1,92 @@
+{
+    "paymentDetails": {
+      "discount": {
+        "amount": 2560,
+        "currency": "rs",
+        "message": " you are saving this "
+      },
+      "formFields": {
+        "cardNo": {
+          "label": "Card Number *",
+          "placeholder": "XXXX XXXX XXXX XXXX",
+          "maxLength": 16,
+          "error": "Please enter your card number"
+        },
+        "expiryMonth": {
+          "label": "Expiration date *",
+          "placeholder": "Month",
+          "maxLength": 2,
+          "error": "Please enter your card expiration month"
+        },
+        "expiryYear": {
+          "placeholder": "Year",
+          "maxLength": 4,
+          "error": "Please enter your card expiration year"
+        },
+        "cvv": {
+          "label": "CVV / CVC *",
+          "placeholder": "xxx",
+          "maxLength": 3,
+          "error": "Please enter your card CVV number"
+        },
+        "cardHolderName": {
+          "label": "Name on Card *",
+          "placeholder": "Enter card holder name",
+          "error": "Please enter card holder name"
+        }
+      },
+      "acceptedCards": [
+        {
+          "type": "Visa",
+          "image": "path/to/visa.svg"
+        },
+        {
+          "type": "MasterCard",
+          "image": "path/to/mastercard.svg"
+        },
+        {
+          "type": "Express Card",
+          "image": "path/to/expresscard.svg"
+        }
+      ]
+    },"fareSummary": {
+      "baseFare": {
+        "label": "Base Fare",
+        "amount": 38660
+      },
+      "discount": {
+        "label": "Discount",
+        "amount": 2560,
+        "isPositive": true
+      },
+      "otherServices": {
+        "label": "Other Services",
+        "amount": 20
+      },
+      "totalFare": {
+        "label": "Total Fare",
+        "amount": 36500
+      },
+      "currency": "$"
+    },
+    "yourBooking": {
+      "flightTicket": {
+        "label": "Flight Ticket",
+        "from": "Mumbai",
+        "to": "New York",
+        "date": "25 Jan",
+        "stops": "1 Stop",
+        "duration": "05h 25m",
+        "flightIcon": "path/to/element9.svg"
+      },
+      "travelerDetail": {
+        "label": "Traveler detail",
+        "name": "Carolyn Ortiz",
+        "ageGroup": "Adult",
+        "gender": "Female",
+        "dob": "Dec-2-1990"
+      },
+      "reviewBookingText": "Review booking"
+    }
+  }
+  
