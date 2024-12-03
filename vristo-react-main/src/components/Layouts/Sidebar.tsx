@@ -338,6 +338,24 @@ const Sidebar = () => {
                                 </NavLink>
                             </li>
 
+                            <li className="menu nav-item">
+                                <NavLink to="/Hotelbooking-list" className="group">
+                                    <div className="flex items-center">
+                                        <IconMenuWidgets className="group-hover:!text-primary shrink-0" />
+                                        <span className="ltr:pl-3 rtl:pr-3 text-black dark:text-[#506690] dark:group-hover:text-white-dark">{t('Hotelbooking-list')}</span>
+                                    </div>
+                                </NavLink>
+                            </li>
+
+                            <li className="menu nav-item">
+                                <NavLink to="/Flightbooking-list" className="group">
+                                    <div className="flex items-center">
+                                        <IconMenuWidgets className="group-hover:!text-primary shrink-0" />
+                                        <span className="ltr:pl-3 rtl:pr-3 text-black dark:text-[#506690] dark:group-hover:text-white-dark">{t('Flightbooking-list')}</span>
+                                    </div>
+                                </NavLink>
+                            </li>
+
                             {/* <li className="menu nav-item">
                                 <NavLink to="/font-icons" className="group">
                                     <div className="flex items-center">

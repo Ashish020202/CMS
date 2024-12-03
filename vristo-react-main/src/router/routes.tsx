@@ -1,4 +1,6 @@
 import { lazy } from 'react';
+import HotelBookingList from '../pages/Apps/HotelBookingList';
+import FlightBookingList from '../pages/Apps/FlightBookingList';
 const Index = lazy(() => import('../pages/Index'));
 const Apitoken = lazy(() => import('../pages/Apps/Apitoken'));
 const Commissions = lazy(() => import('../pages/Apps/Commissions'));
@@ -124,6 +126,14 @@ const routes = [
     {
         path: '/flight-details',
         element: <FlightDetails />,
+    },
+    {
+        path: '/Hotelbooking-list',
+        element: <HotelBookingList />
+    },
+    {
+        path: '/Flightbooking-list',
+        element: <FlightBookingList />
     },
     {
         path: '/apps/commissions',
