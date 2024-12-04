@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 
 const Commissions = () => {
 
@@ -16,7 +17,7 @@ const Commissions = () => {
       isEditing: false
     }
   ]);
-
+  
   
   const handleEditClick = (id:any) => {
     setCommissions(commissions.map(commission => 
@@ -27,7 +28,7 @@ const Commissions = () => {
   };
 
 
-  const handleSave = (id:any) => {
+  const handleSave = async(id:any) => {
     setCommissions(commissions.map(commission => 
       commission.id === id 
         ? { ...commission, isEditing: false }
@@ -35,9 +36,32 @@ const Commissions = () => {
     ));
     
    
-    const updatedCommission:any = commissions.find(c => c.id === id);
-    console.log(`Updated ${updatedCommission.label}:`, updatedCommission.value + "%");
+    // const updatedCommission:any = commissions.find(c => c.id === id);
+    // console.log(`Updated ${updatedCommission.label}:`, updatedCommission.value + "%");
+    const updatedCommission = {
+      flightCommission:commissions.find(c=>c.id==='flight')?.value,
+      hotelCommission:commissions.find(c=>c.id==='hotel')?.value
+    }
+
+  
+  
+        try{
+          const response =await  axios.post('http://localhost:5000/api/commissions',updatedCommission);
+          console.log('commison res', response.data);
+
+          setCommissions(commissions.map(commission =>
+            commission.id === id
+              ? { ...commission, isEditing: false }
+              : commission
+          ));
+          
+        }catch(error){
+          console.log('errror');
+          
+        }
+
   };
+
 
  
   const handleValueChange = (id:any, newValue:any) => {
