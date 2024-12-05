@@ -1,10 +1,18 @@
 import React, { useState } from "react";
+import axios from "axios";
+import { useEffect } from "react";
 
 type Booking = {
     VoucherStatus: boolean;
     ResponseStatus: number;
     TraceId: string;
     Status: number;
+    HotelName:string;
+    HotelCode:string;
+    GuestNationality:string;
+    NoOfRooms:number;
+    Dates:string;
+    CurrenyCode:string;
     HotelBookingStatus: string;
     InvoiceNumber: string;
     ConfirmationNo: string;
@@ -18,29 +26,32 @@ type Booking = {
 };
 
 const HotelBookingList: React.FC = () => {
-    const [bookings, setBookings] = useState<Booking[]>([
-        {
-            VoucherStatus: true,
-            ResponseStatus: 1,
-            TraceId: "1",
-            Status: 1,
-            HotelBookingStatus: "Confirmed",
-            InvoiceNumber: "MW/1920/17991",
-            ConfirmationNo: "270-300706",
-            BookingRefNo: "270-300706",
-            BookingId: 1554760,
-            IsPriceChanged: false,
-            IsCancellationPolicyChanged: false,
-            createdAt: "2024-11-28T13:48:34.435+00:00",
-            Price:3849,
-            PriceAfterCommission:3944
-        }
-    ]);
+    const [bookings, setBookings] = useState<Booking[]>([]);
 
     const [editableRow, setEditableRow] = useState<number | null>(null);
+    const [loading, setLoading] = useState<boolean>(true);
+    const [error, setError] = useState<string | null>(null);
     const [editedValues, setEditedValues] = useState<Partial<Booking>>({});
     const [searchFilters, setSearchFilters] = useState<Partial<Booking>>({});
     const [expandedRow, setExpandedRow] = useState<number | null>(null);
+
+    const fetchBookings = async () => {
+        try {
+            setLoading(true);
+            const response = await axios.get('http://localhost:5000/api/response');
+            setBookings(response.data);
+            setError(null);
+        } catch (err) {
+            setError('Failed to fetch bookings. Please try again later.');
+            console.error('Error fetching bookings:', err);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        fetchBookings();
+    }, []);
 
     const handleEditClick = (id: number): void => {
         setEditableRow(id);
@@ -50,15 +61,37 @@ const HotelBookingList: React.FC = () => {
         }
     };
 
-    const handleSaveClick = (id: number): void => {
-        setBookings((prevBookings) =>
-            prevBookings.map((booking) =>
-                booking.BookingId === id ? { ...booking, ...editedValues } : booking
-            )
-        );
-        setEditableRow(null);
-        setEditedValues({});
+    // const handleSaveClick = (id: number): void => {
+    //     setBookings((prevBookings) =>
+    //         prevBookings.map((booking) =>
+    //             booking.BookingId === id ? { ...booking, ...editedValues } : booking
+    //         )
+    //     );
+    //     setEditableRow(null);
+    //     setEditedValues({});
+    // };
+
+    const handleSaveClick = async (id: number): Promise<void> => {
+        try {
+            // Add API call to update booking
+            await axios.put(`http://localhost:5000/api/response/${id}`, editedValues);
+            
+            setBookings((prevBookings) =>
+                prevBookings.map((booking) =>
+                    booking.BookingId === id ? { ...booking, ...editedValues } : booking
+                )
+            );
+            setEditableRow(null);
+            setEditedValues({});
+            
+            // Refresh bookings after update
+            fetchBookings();
+        } catch (err) {
+            console.error('Error updating booking:', err);
+            setError('Failed to update booking. Please try again.');
+        }
     };
+
 
     const handleInputChange = (
         field: keyof Booking,
@@ -189,6 +222,17 @@ const HotelBookingList: React.FC = () => {
                                     />
                                 ) : booking.BookingRefNo}
                             </div>
+                            <div className="text-gray-600 dark:text-gray-400">Price:</div>
+                            <div>
+                                {isEditing ? (
+                                    <input
+                                        className="w-full px-2 py-1 border rounded dark:bg-gray-800 dark:border-gray-600 dark:text-gray-200"
+                                        type="text"
+                                        value={editedValues.Price || booking.Price}
+                                        onChange={(e) => handleInputChange("BookingRefNo", e.target.value)}
+                                    />
+                                ) : booking.Price}
+                            </div>
                             <div className="text-gray-600 dark:text-gray-400">Price After Commission:</div>
                             <div>
                                 {isEditing ? (
@@ -241,7 +285,7 @@ const HotelBookingList: React.FC = () => {
                 <table className="min-w-full border-collapse border border-gray-300 dark:border-gray-700">
                     <thead>
                         <tr className="bg-gray-200 dark:bg-gray-700">
-                            {[
+                            {[  
                                 "Voucher Status",
                                 "Response Status",
                                 "Trace ID",

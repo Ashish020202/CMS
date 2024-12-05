@@ -1,6 +1,10 @@
 import { lazy } from 'react';
 import HotelBookingList from '../pages/Apps/HotelBookingList';
 import FlightBookingList from '../pages/Apps/FlightBookingList';
+import HotelBookingView from '../pages/Apps/HotelBookingView';
+import FlightBookingDetails from '../pages/Apps/FlightBookingDetails';
+import FlightBookingEdit from '../pages/Apps/FlightBookingEdit';
+
 const Index = lazy(() => import('../pages/Index'));
 const Apitoken = lazy(() => import('../pages/Apps/Apitoken'));
 const Commissions = lazy(() => import('../pages/Apps/Commissions'));
@@ -130,6 +134,18 @@ const routes = [
     {
         path: '/Hotelbooking-list',
         element: <HotelBookingList />
+    },
+    {
+        path: '/Hotelbooking-View',
+        element: <HotelBookingView />
+    },
+    {
+        path: '/Flightbooking-Details/:id',
+        element: <FlightBookingDetails />
+    },
+    {
+        path: '/Flightbooking-Edit/:id',
+        element: <FlightBookingEdit />
     },
     {
         path: '/Flightbooking-list',

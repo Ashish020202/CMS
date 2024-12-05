@@ -346,6 +346,30 @@ const Sidebar = () => {
                                     </div>
                                 </NavLink>
                             </li>
+                            {/* <li className="menu nav-item">
+                                <NavLink to="/Flightbooking-Details" className="group">
+                                    <div className="flex items-center">
+                                        <IconMenuWidgets className="group-hover:!text-primary shrink-0" />
+                                        <span className="ltr:pl-3 rtl:pr-3 text-black dark:text-[#506690] dark:group-hover:text-white-dark">{t('')}</span>
+                                    </div>
+                                </NavLink>
+                            </li> */}
+                            {/* <li className="menu nav-item">
+                                <NavLink to="/Flightbooking-Edit" className="group">
+                                    <div className="flex items-center">
+                                        <IconMenuWidgets className="group-hover:!text-primary shrink-0" />
+                                        <span className="ltr:pl-3 rtl:pr-3 text-black dark:text-[#506690] dark:group-hover:text-white-dark">{t('Flightbooking-Edit')}</span>
+                                    </div>
+                                </NavLink>
+                            </li> */}
+                            <li className="menu nav-item">
+                                <NavLink to="/Hotelbooking-View" className="group">
+                                    <div className="flex items-center">
+                                        <IconMenuWidgets className="group-hover:!text-primary shrink-0" />
+                                        <span className="ltr:pl-3 rtl:pr-3 text-black dark:text-[#506690] dark:group-hover:text-white-dark">{t('Hotelbooking-View')}</span>
+                                    </div>
+                                </NavLink>
+                            </li>
 
                             <li className="menu nav-item">
                                 <NavLink to="/Flightbooking-list" className="group">
