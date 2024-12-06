@@ -1,27 +1,29 @@
 import React from "react";
 import { useLocation } from "react-router-dom";
-import { Plane, MapPin, Clock, User, Phone, Mail, CreditCard, Calendar } from "lucide-react";
+import { Hotel, MapPin, User, Phone, Mail, CreditCard, Calendar, Bookmark } from "lucide-react";
 
-type FlightBooking = {
+type HotelBooking = {
+    id: number;
     bookingId: number;
-    pnr: string;
-    airlineName: string;
-    flightNumber: string;
-    origin: string;
-    destination: string;
-    passengerName: string;
-    contactNo: string;
-    email: string;
-    totalFare: number;
-    departureTime: string;
-    arrivalTime: string;
+    HotelName: string;
+    HotelCode: string;
+    GuestNationality: string;
+    NoOfRooms: number;
+    Dates: string;
+    HotelBookingStatus: string;
+    InvoiceNumber: string;
+    ConfirmationNo: string;
+    BookingRefNo: string;
+    Price: number;
+    PriceAfterCommission: number;
+    ContactEmail?: string;
 };
 
-const FlightBookingDetails: React.FC = () => {
+const HotelBookingDetails: React.FC = () => {
     const location = useLocation();
-    const booking = location.state as FlightBooking;
+    const booking = location.state as HotelBooking;
 
-    // Helper function to render booking detail row
+
     const BookingDetailRow = ({ 
         icon: Icon, 
         label, 
@@ -47,58 +49,68 @@ const FlightBookingDetails: React.FC = () => {
     return (
         <div className="p-4 lg:p-8 bg-gray-50 dark:bg-gray-800 min-h-screen">
             <div className="max-w-2xl mx-auto bg-white dark:bg-gray-700 rounded-xl shadow-2xl overflow-hidden">
-                {/* Header */}
+               
                 <div className="bg-blue-600 dark:bg-blue-800 p-6 text-white">
                     <div className="flex justify-between items-center">
                         <h2 className="text-2xl font-bold">Booking Detail</h2>
                         <div className="flex items-center space-x-2">
-                            <Plane className="w-6 h-6" />
-                            <span className="font-semibold">{booking.pnr}</span>
+                            <Hotel className="w-6 h-6" />
+                            <span className="font-semibold">{booking.BookingRefNo}</span>
                         </div>
                     </div>
                 </div>
 
-                {/* Booking Details */}
+              
                 <div className="p-6">
                     <BookingDetailRow 
-                        icon={User} 
-                        label="Passenger Name" 
-                        value={booking.passengerName} 
+                        icon={Hotel} 
+                        label="Hotel Name" 
+                        value={`${booking.HotelName} (${booking.HotelCode})`} 
                     />
                     <BookingDetailRow 
-                        icon={Plane} 
-                        label="Airline" 
-                        value={`${booking.airlineName} - ${booking.flightNumber}`} 
+                        icon={User} 
+                        label="Guest Nationality" 
+                        value={booking.GuestNationality} 
                     />
                     <BookingDetailRow 
                         icon={MapPin} 
-                        label="Route" 
-                        value={`${booking.origin} → ${booking.destination}`} 
+                        label="Booking Reference" 
+                        value={booking.BookingRefNo} 
                     />
                     <BookingDetailRow 
                         icon={Calendar} 
-                        label="Departure Time" 
-                        value={booking.departureTime} 
+                        label="Dates" 
+                        value={booking.Dates} 
                     />
                     <BookingDetailRow 
-                        icon={Clock} 
-                        label="Arrival Time" 
-                        value={booking.arrivalTime} 
-                    />
-                    <BookingDetailRow 
-                        icon={Phone} 
-                        label="Contact Number" 
-                        value={booking.contactNo} 
-                    />
-                    <BookingDetailRow 
-                        icon={Mail} 
-                        label="Email" 
-                        value={booking.email} 
+                        icon={Bookmark} 
+                        label="Booking Status" 
+                        value={booking.HotelBookingStatus} 
                     />
                     <BookingDetailRow 
                         icon={CreditCard} 
-                        label="Total Fare" 
-                        value={`$${booking.totalFare.toFixed(2)}`} 
+                        label="Total Price" 
+                        value={`${booking.Price}`} 
+                    />
+                    <BookingDetailRow 
+                        icon={CreditCard} 
+                        label="Price After Commission" 
+                        value={`${booking.PriceAfterCommission}`} 
+                    />
+                    <BookingDetailRow 
+                        icon={Phone} 
+                        label="Number of Rooms" 
+                        value={booking.NoOfRooms} 
+                    />
+                    <BookingDetailRow 
+                        icon={Mail} 
+                        label="Invoice Number" 
+                        value={booking.InvoiceNumber} 
+                    />
+                    <BookingDetailRow 
+                        icon={Bookmark} 
+                        label="Confirmation Number" 
+                        value={booking.ConfirmationNo} 
                     />
                 </div>
             </div>
@@ -106,4 +118,4 @@ const FlightBookingDetails: React.FC = () => {
     );
 };
 
-export default FlightBookingDetails;
+export default HotelBookingDetails;

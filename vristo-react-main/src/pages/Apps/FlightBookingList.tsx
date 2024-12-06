@@ -103,6 +103,7 @@ const FlightBookingList: React.FC = () => {
 
     const fields: (keyof FlightBooking)[] = [
         "Actions",
+        "bookingId",
         "airlineName",
         "flightNumber",
         "origin",
