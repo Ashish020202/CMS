@@ -5,6 +5,10 @@ import HotelBookingDetails from '../pages/Apps/HotelBookingDetails';
 import FlightBookingDetails from '../pages/Apps/FlightBookingDetails';
 import FlightBookingEdit from '../pages/Apps/FlightBookingEdit';
 import HotelbookingEdit from '../pages/Apps/HotelBookingEdit';
+import UserDetailList from '../pages/Apps/UserDetailList';
+import UserDetailEdit from '../pages/Apps/UserDetailEdit';
+import UserDetails from '../pages/Apps/userDetail';
+
 
 const Index = lazy(() => import('../pages/Index'));
 const Apitoken = lazy(() => import('../pages/Apps/Apitoken'));
@@ -155,6 +159,18 @@ const routes = [
     {
         path: '/Flightbooking-list',
         element: <FlightBookingList />
+    },
+    {
+        path: '/Userdetail-list',
+        element: <UserDetailList />
+    },
+    {
+        path: '/Userdetail-Edit/:id',
+        element: <UserDetailEdit />
+    },
+    {
+        path: '/User-detail/:id',
+        element: <UserDetails />
     },
     {
         path: '/apps/commissions',

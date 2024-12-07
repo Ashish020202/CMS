@@ -320,20 +320,29 @@ const Sidebar = () => {
                                 </AnimateHeight>
                             </li> */}
 
-                            <li className="menu nav-item">
+                            {/* <li className="menu nav-item">
                                 <NavLink to="/flight-details" className="group">
                                     <div className="flex items-center">
                                         <IconMenuCharts className="group-hover:!text-primary shrink-0" />
                                         <span className="ltr:pl-3 rtl:pr-3 text-black dark:text-[#506690] dark:group-hover:text-white-dark">{t('flight-details')}</span>
                                     </div>
                                 </NavLink>
-                            </li>
+                            </li> */}
 
-                            <li className="menu nav-item">
+                            {/* <li className="menu nav-item">
                                 <NavLink to="/flight-booking" className="group">
                                     <div className="flex items-center">
                                         <IconMenuWidgets className="group-hover:!text-primary shrink-0" />
-                                        <span className="ltr:pl-3 rtl:pr-3 text-black dark:text-[#506690] dark:group-hover:text-white-dark">{t('flight-booking')}</span>
+                                        <span className="ltr:pl-3 rtl:pr-3 text-black dark:text-[#506690] dark:group-hover:text-white-dark">{t('Cupons & Refferals')}</span>
+                                    </div>
+                                </NavLink>
+                            </li> */}
+
+                            <li className="menu nav-item">
+                                <NavLink to="/Flightbooking-list" className="group">
+                                    <div className="flex items-center">
+                                        <IconMenuWidgets className="group-hover:!text-primary shrink-0" />
+                                        <span className="ltr:pl-3 rtl:pr-3 text-black dark:text-[#506690] dark:group-hover:text-white-dark">{t('Flightbooking-list')}</span>
                                     </div>
                                 </NavLink>
                             </li>
@@ -346,6 +355,31 @@ const Sidebar = () => {
                                     </div>
                                 </NavLink>
                             </li>
+
+                            <li className="menu nav-item">
+                                <NavLink to="/Userdetail-list" className="group">
+                                    <div className="flex items-center">
+                                        <IconMenuWidgets className="group-hover:!text-primary shrink-0" />
+                                        <span className="ltr:pl-3 rtl:pr-3 text-black dark:text-[#506690] dark:group-hover:text-white-dark">{t('UserDetail-list')}</span>
+                                    </div>
+                                </NavLink>
+                            </li>
+                            <li className="menu nav-item">
+                                <NavLink to="/flight-booking" className="group">
+                                    <div className="flex items-center">
+                                        <IconMenuWidgets className="group-hover:!text-primary shrink-0" />
+                                        <span className="ltr:pl-3 rtl:pr-3 text-black dark:text-[#506690] dark:group-hover:text-white-dark">{t('Cupons & Refferals')}</span>
+                                    </div>
+                                </NavLink>
+                            </li>
+                            {/* <li className="menu nav-item">
+                                <NavLink to="/Userdetail-edit" className="group">
+                                    <div className="flex items-center">
+                                        <IconMenuWidgets className="group-hover:!text-primary shrink-0" />
+                                        <span className="ltr:pl-3 rtl:pr-3 text-black dark:text-[#506690] dark:group-hover:text-white-dark">{t('UserDetail-edit')}</span>
+                                    </div>
+                                </NavLink>
+                            </li> */}
                             {/* <li className="menu nav-item">
                                 <NavLink to="/Flightbooking-Details" className="group">
                                     <div className="flex items-center">
@@ -371,14 +405,14 @@ const Sidebar = () => {
                                 </NavLink>
                             </li> */}
 
-                            <li className="menu nav-item">
+                            {/* <li className="menu nav-item">
                                 <NavLink to="/Flightbooking-list" className="group">
                                     <div className="flex items-center">
                                         <IconMenuWidgets className="group-hover:!text-primary shrink-0" />
                                         <span className="ltr:pl-3 rtl:pr-3 text-black dark:text-[#506690] dark:group-hover:text-white-dark">{t('Flightbooking-list')}</span>
                                     </div>
                                 </NavLink>
-                            </li>
+                            </li> */}
                             {/* <li className="menu nav-item">
                                 <NavLink to="/Hotelbooking-Edit" className="group">
                                     <div className="flex items-center">

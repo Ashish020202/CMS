@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import axios from "axios";
 import { 
     Save, 
     Edit, 
@@ -23,6 +24,7 @@ type HotelBooking = {
     InvoiceNumber: string;
     ConfirmationNo: string;
     BookingRefNo: string;
+    BookingId:string;
     Price: number;
     PriceAfterCommission: number;
     ContactEmail?: string;
@@ -99,6 +101,30 @@ const HotelbookingEdit: React.FC = () => {
         setIsEditing(false);
     };
 
+    const handleHotelCancel = async () =>{
+        const cancelRequest = {
+          BookingId:formData.BookingId,
+          RequestType: "4", // Change request type for cancellation
+          BookingMode: "5", // Mode specific to the booking
+          Remarks:"hotel cancelled",
+          SrdvType: "SingleTB",
+          SrdvIndex: "SrdvTB",
+          EndUserIp:"103.168.165.86",
+          ClientId:"180130",
+          UserName:"CheapiTr",
+          Password:"CheapiTr@3"
+        }
+
+        try {
+            const response = await axios.post("http://localhost:5000/api/hotelcancle", cancelRequest);
+            alert("Booking canceled successfully!");
+            console.log("Cancellation Response:", response.data);
+        } catch (error) {
+            console.error("Cancellation Error:", error);
+            alert("Failed to cancel the booking.");
+        }
+    }
+
     // Custom input component for consistent styling
     const EditableInput = ({
         icon: Icon,
@@ -106,7 +132,8 @@ const HotelbookingEdit: React.FC = () => {
         name,
         value,
         readOnly,
-        type = "text"
+        type = "text",
+        options = []
     }: {
         icon: React.ElementType;
         label: string;
@@ -114,6 +141,7 @@ const HotelbookingEdit: React.FC = () => {
         value: string | number;
         readOnly?: boolean;
         type?: string;
+        options?: string[];
     }) => (
         <div className="space-y-2">
             <div className="flex items-center space-x-3">
@@ -123,21 +151,36 @@ const HotelbookingEdit: React.FC = () => {
                 </label>
             </div>
             <div>
-                <input
-                    type={type}
-                    id={name}
-                    name={name}
-                    value={value}
-                    onChange={handleInputChange}
-                    readOnly={readOnly}
-                    className={`
-                        w-full px-3 py-2 border rounded-lg 
-                        dark:bg-gray-600 dark:text-white 
-                        focus:outline-none focus:ring focus:border-blue-500
-                        ${readOnly ? "bg-gray-100 dark:bg-gray-700 cursor-not-allowed" : ""}
-                        ${errors[name] ? "border-red-500" : ""}
-                    `}
-                />
+                {name === "HotelBookingStatus" && !readOnly ? (
+                    <select
+                        id={name}   
+                        name={name}
+                        value={value}
+                        onChange={handleInputChange}
+                        className="w-full px-3 py-2 border rounded-lg dark:bg-gray-600 dark:text-white focus:outline-none focus:ring focus:border-blue-500"
+                    >
+                        {options.map((option) => (
+                            <option key={option} value={option}>
+                                {option}
+                            </option>
+                        ))}
+                    </select>
+                ) : (
+                    <input
+                        type={type}
+                        id={name}
+                        name={name}
+                        value={value}
+                        onChange={handleInputChange}
+                        readOnly={readOnly}
+                        className={`w-full px-3 py-2 border rounded-lg 
+                            dark:bg-gray-600 dark:text-white 
+                            focus:outline-none focus:ring focus:border-blue-500
+                            ${readOnly ? "bg-gray-100 dark:bg-gray-700 cursor-not-allowed" : ""}
+                            ${errors[name] ? "border-red-500" : ""}
+                        `}
+                    />
+                )}
                 {errors[name] && <p className="text-red-500 text-sm mt-1">{errors[name]}</p>}
             </div>
         </div>
@@ -224,8 +267,20 @@ const HotelbookingEdit: React.FC = () => {
                         label="Booking Status"
                         name="HotelBookingStatus"
                         value={formData.HotelBookingStatus}
-                        readOnly
+                        readOnly={!isEditing}
+                        options={["Confirm", "Cancel"]} // Dropdown options for HotelBookingStatus
                     />
+
+                      {formData.HotelBookingStatus === "Cancel" && (
+                        <button
+                            type="button"
+                            onClick={handleHotelCancel}
+                            className="w-full flex items-center justify-center bg-red-500 hover:bg-red-600 text-white px-4 py-3 rounded-lg transition duration-300"
+                            
+                        >
+                            Cancel Booking
+                        </button>
+                    )}
 
                     {isEditing && (
                         <div className="pt-4">

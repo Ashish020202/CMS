@@ -1,4 +1,5 @@
 import React, { useState, ChangeEvent } from 'react';
+import axios from 'axios';
 
 
 interface FormValues {
@@ -41,12 +42,22 @@ const SmsSettings: React.FC = () => {
     };
 
     
-    const handleSaveField = (fieldName: keyof EditableFields): void => {
+    const handleSaveField = async(fieldName: keyof EditableFields): Promise<void> => {
         
         setEditableFields(prev => ({
             ...prev,
             [fieldName]: false
         }));
+        try {
+            await axios.post('http://localhost:5000/api/smstoken', {
+              accountSid: formValues.apiToken,
+              authToken: formValues.apiDetails,
+            });
+            alert('Credentials updated successfully');
+          } catch (error) {
+            console.error('Error updating credentials:', error);
+            alert('Failed to update credentials');
+          }
     };
 
  
@@ -111,8 +122,8 @@ const SmsSettings: React.FC = () => {
 
    
     const fields: FieldConfig[] = [
-        { fieldName: 'apiToken', label: 'API Token' },
-        { fieldName: 'apiDetails', label: 'API Details', isTextArea: true }
+        { fieldName: 'apiToken', label: 'Account Sid' },
+        { fieldName: 'apiDetails', label: 'Auth Token', isTextArea: true }
     ];
 
     return (

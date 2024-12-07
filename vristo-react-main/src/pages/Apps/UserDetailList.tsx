@@ -1,97 +1,84 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Eye, Edit, Search, X } from "lucide-react";
-import axios from "axios";
 
-type HotelBooking = {
-    id:number,
-    Actions:string;
+type UserBooking = {
+    Actions: string;
     bookingId: number;
-    HotelName: string;
-    HotelCode: string;
-    GuestNationality: string;
-    NoOfRooms: number;
-    Dates: string;
-    HotelBookingStatus: string;
-    InvoiceNumber: string;
-    ConfirmationNo: string;
-    BookingRefNo: string;
-    BookingId:string;
-    Price: number;
-    PriceAfterCommission: number;
-    ContactEmail?: string;
+    name: string;
+    email: string;
+    password: string;
+    contact: string;
+    bookingStatus: string;
 };
 
-const HotelBookingList: React.FC = () => {
-    const [bookings, setBookings] = useState<HotelBooking[]>([]);
+const UserDetailList: React.FC = () => {
+    const [bookings, setBookings] = useState<UserBooking[]>([]);
     const [editableRow, setEditableRow] = useState<number | null>(null);
-    const [editedValues, setEditedValues] = useState<Partial<HotelBooking>>({});
-    const [searchFilters, setSearchFilters] = useState<Partial<HotelBooking>>({});
+    const [editedValues, setEditedValues] = useState<Partial<UserBooking>>({});
+    const [searchFilters, setSearchFilters] = useState<Partial<UserBooking>>({});
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
     const navigate = useNavigate();
 
     useEffect(() => {
-        fetchHotelBookings();
+        fetchUserBookings();
     }, []);
 
-    const fetchHotelBookings = async () => {
+    const fetchUserBookings = async () => {
         try {
-            const response = await axios.get('http://localhost:5000/api/response');
-            const bookingsWithIds = response.data.map((booking: Omit<HotelBooking, 'id'>, index: number) => ({
-                ...booking,
-                id: index + 1
-            }));
-            setBookings(bookingsWithIds);
-            setError(null);
+            const response = await fetch('http://localhost:5000/api/users');
+            if (!response.ok) {
+                throw new Error('Failed to fetch user bookings');
+            }
+            const data = await response.json();
+            setBookings(data);
         } catch (err) {
-            setError('Failed to fetch hotel bookings');
-            console.error('Error fetching bookings:', err);
+            setError(err instanceof Error ? err.message : 'An error occurred');
         } finally {
             setLoading(false);
         }
     };
 
-    const handleEdit = (booking: HotelBooking): void => {
-        navigate(`/Hotelbooking-Edit/${booking.id}`, { state: booking });
+    const handleEditClick = (id: number): void => {
+        setEditableRow(id);
+        const currentBooking = bookings.find((booking) => booking.bookingId === id);
+        if (currentBooking) {
+            setEditedValues(currentBooking);
+        }
     };
     
-    const handleViewClick = (booking: HotelBooking): void => {
-        navigate(`/Hotelbooking-Details/${booking.id}`, { state: booking });
+    const handleEdit = (booking: UserBooking): void => {
+        navigate(`/userDetail-edit/${booking.bookingId}`, { state: booking });
+    };
+    
+    const handleViewClick = (booking: UserBooking): void => {
+        navigate(`/user-detail/${booking.bookingId}`, { state: booking });
     };
 
-    const handleSaveClick = async (id: number): Promise<void> => {
-        try {
-            await axios.put(`http://localhost:5000/api/response/${id}`, editedValues);
-            
-            setBookings((prevBookings) =>
-                prevBookings.map((booking) =>
-                    booking.id === id ? { ...booking, ...editedValues } : booking
-                )
-            );
-            setEditableRow(null);
-            setEditedValues({});
-            
-            fetchHotelBookings();
-        } catch (err) {
-            console.error('Error updating booking:', err);
-            setError('Failed to update booking');
-        }
+    const handleSaveClick = (id: number): void => {
+        setBookings((prevBookings) =>
+            prevBookings.map((booking) =>
+                booking.bookingId === id ? { ...booking, ...editedValues } : booking
+            )
+        );
+        setEditableRow(null);
+        setEditedValues({});
     };
 
     const handleInputChange = (
-        field: keyof HotelBooking,
-        value: string | number
+        field: keyof UserBooking,
+        value: string
     ): void => {
         setEditedValues((prev) => ({ ...prev, [field]: value }));
     };
 
-    const handleSearchChange = (field: keyof HotelBooking, value: string): void => {
+    const handleSearchChange = (field: keyof UserBooking, value: string): void => {
         setSearchFilters((prev) => ({ ...prev, [field]: value }));
     };
 
-    const clearSearchFilter = (field: keyof HotelBooking): void => {
+    const clearSearchFilter = (field: keyof UserBooking): void => {
         setSearchFilters((prev) => {
             const newFilters = { ...prev };
             delete newFilters[field];
@@ -101,35 +88,28 @@ const HotelBookingList: React.FC = () => {
 
     const filteredBookings = bookings.filter((booking) => {
         return Object.keys(searchFilters).every((key) => {
-            const filterValue = searchFilters[key as keyof HotelBooking];
+            const filterValue = searchFilters[key as keyof UserBooking];
             if (!filterValue) return true;
-            const bookingValue = String(booking[key as keyof HotelBooking]).toLowerCase();
+            const bookingValue = String(booking[key as keyof UserBooking]).toLowerCase();
             return bookingValue.includes(String(filterValue).toLowerCase());
         });
     });
 
-    const fields: (keyof HotelBooking)[] = [
+    const fields: (keyof UserBooking)[] = [
         "Actions",
-        "HotelBookingStatus",
-        "InvoiceNumber",
-        "ConfirmationNo",
-        "BookingRefNo",
-        "BookingId",
-        "Price",
-        "PriceAfterCommission",
-        "bookingId",
-        "HotelName",
-        "HotelCode",
-        "GuestNationality",
-        "NoOfRooms",
-        "Dates",
+        // "bookingId",
+        // "name", 
+        "email", 
+        "password", 
+        "contact", 
+        "bookingStatus"
     ];
 
     if (loading) {
         return (
             <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-blue-50 to-blue-100 dark:from-gray-900 dark:to-gray-800">
                 <div className="text-lg font-semibold text-blue-600 dark:text-blue-400 animate-pulse">
-                    Loading Bookings...
+                    Loading User Bookings...
                 </div>
             </div>
         );
@@ -227,21 +207,19 @@ const HotelBookingList: React.FC = () => {
                                             >
                                                 {editableRow === booking.bookingId ? (
                                                     <input
-                                                        type={["NoOfRooms", "Price", "PriceAfterCommission"].includes(field) ? "number" : "text"}
+                                                        type={field === "password" ? "password" : "text"}
                                                         value={editedValues[field] ?? booking[field]}
                                                         onChange={(e) =>
                                                             handleInputChange(
                                                                 field,
-                                                                ["NoOfRooms", "Price", "PriceAfterCommission"].includes(field)
-                                                                    ? parseInt(e.target.value)
-                                                                    : e.target.value
+                                                                e.target.value
                                                             )
                                                         }
                                                         className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-300 focus:outline-none dark:bg-gray-800 dark:border-gray-600"
                                                     />
                                                 ) : (
                                                     <span className="font-medium truncate max-w-xs block">
-                                                        {booking[field]}
+                                                        {field === "password" ? "********" : booking[field]}
                                                     </span>
                                                 )}
                                             </td>
@@ -271,20 +249,20 @@ const HotelBookingList: React.FC = () => {
                                     <span className="text-sm text-gray-900 dark:text-gray-100 font-medium">
                                         {editableRow === booking.bookingId ? (
                                             <input
-                                                type={["NoOfRooms", "Price", "PriceAfterCommission"].includes(field) ? "number" : "text"}
+                                                type={field === "password" ? "password" : "text"}
                                                 value={editedValues[field] ?? booking[field]}
                                                 onChange={(e) =>
                                                     handleInputChange(
                                                         field,
-                                                        ["NoOfRooms", "Price", "PriceAfterCommission"].includes(field)
-                                                            ? parseInt(e.target.value)
-                                                            : e.target.value
+                                                        e.target.value
                                                     )
                                                 }
                                                 className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-300 focus:outline-none dark:bg-gray-800 dark:border-gray-600"
                                             />
                                         ) : (
-                                            <span className="break-words">{booking[field]}</span>
+                                            <span className="break-words">
+                                                {field === "password" ? "********" : booking[field]}
+                                            </span>
                                         )}
                                     </span>
                                 </div>
@@ -322,4 +300,4 @@ const HotelBookingList: React.FC = () => {
     );
 };
 
-export default HotelBookingList;
+export default UserDetailList;

@@ -5,34 +5,23 @@ import {
     Save, 
     Edit, 
     User, 
-    Plane, 
-    MapPin, 
-    Phone, 
     Mail, 
-    CreditCard, 
-    Calendar, 
-    Clock 
+    Phone, 
+    Calendar 
 } from "lucide-react";
 
-type FlightBooking = {
+type UserBooking = {
     bookingId: number;
-    pnr: string;
-    airlineName: string;
-    flightNumber: string;
-    origin: string;
-    destination: string;
-    passengerName: string;
-    contactNo: string;
+    name: string;
     email: string;
-    totalFare: number;
-    departureTime: string;
-    arrivalTime: string;
+    contact: string;
+    bookingStatus: string;
 };
 
-const EditBookingDetails: React.FC = () => {
+const UserDetailEdit: React.FC = () => {
     const location = useLocation();
     const navigate = useNavigate();
-    const booking = location.state as FlightBooking;
+    const booking = location.state as UserBooking;
 
     const [formData, setFormData] = useState(booking);
     const [isEditing, setIsEditing] = useState(false);
@@ -45,14 +34,14 @@ const EditBookingDetails: React.FC = () => {
                 return value.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/) 
                     ? "" 
                     : "Invalid email address";
-            case "contactNo":
-                return value.match(/^[0-9]{10}$/) 
+            case "contact":
+                return value.match(/^[+]?[\d\s()-]{10,}$/) 
                     ? "" 
-                    : "Phone number must be 10 digits";
-            case "passengerName":
-                return value.trim().length > 2 
+                    : "Invalid contact number";
+            case "name":
+                return value.trim().length >= 2 
                     ? "" 
-                    : "Name must be at least 3 characters";
+                    : "Name must be at least 2 characters";
             default:
                 return "";
         }
@@ -75,14 +64,14 @@ const EditBookingDetails: React.FC = () => {
         setIsEditing((prev) => !prev);
     };
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
         // Validate all fields before submission
         const newErrors: { [key: string]: string } = {};
         Object.keys(formData).forEach((key) => {
-            if (["email", "contactNo", "passengerName"].includes(key)) {
-                const errorMessage = validateField(key, formData[key as keyof FlightBooking] as string);
+            if (["name", "email", "contact"].includes(key)) {
+                const errorMessage = validateField(key, formData[key as keyof UserBooking] as string);
                 if (errorMessage) {
                     newErrors[key] = errorMessage;
                 }
@@ -94,11 +83,30 @@ const EditBookingDetails: React.FC = () => {
             return;
         }
 
-        console.log("Updated Booking Details:", formData);
+        // Set loading state
+        
+        try {
+            // Make API call to update booking status
+            const response = await axios.patch(`http://localhost:5000/api/updatedusers`, {
+                email: formData.email, // Assuming email is the unique identifier
+                bookingStatus: formData.bookingStatus
+            });
 
-        // Save and exit edit mode
-        setIsEditing(false);
+            // Log successful update
+            console.log("Updated User Booking Details:", response.data);
+
+            // Reset editing state and loading
+            setIsEditing(false);
+            
+            // Optional: Show success message or navigate
+            // You might want to add a toast or notification here
+        } catch (error) {
+            console.error("Error updating booking status:", error);
+            // Handle error - show error message to user
+            alert("Failed to update booking status. Please try again.");
+        } 
     };
+
 
     // Custom input component for consistent styling
     const EditableInput = ({
@@ -107,12 +115,16 @@ const EditBookingDetails: React.FC = () => {
         name,
         value,
         readOnly,
+        type = "text",
+        options = []
     }: {
         icon: React.ElementType;
         label: string;
         name: string;
         value: string | number;
         readOnly?: boolean;
+        type?: string;
+        options?: string[];
     }) => (
         <div className="space-y-2">
             <div className="flex items-center space-x-3">
@@ -122,46 +134,40 @@ const EditBookingDetails: React.FC = () => {
                 </label>
             </div>
             <div>
-                <input
-                    type="text"
-                    id={name}
-                    name={name}
-                    value={value}
-                    onChange={handleInputChange}
-                    readOnly={readOnly}
-                    className={`
-                        w-full px-3 py-2 border rounded-lg 
-                        dark:bg-gray-600 dark:text-white 
-                        focus:outline-none focus:ring focus:border-blue-500
-                        ${readOnly ? "bg-gray-100 dark:bg-gray-700 cursor-not-allowed" : ""}
-                        ${errors[name] ? "border-red-500" : ""}
-                    `}
-                />
+                {name === "bookingStatus" && !readOnly ? (
+                    <select
+                        id={name}   
+                        name={name}
+                        value={value}
+                        onChange={handleInputChange}
+                        className="w-full px-3 py-2 border rounded-lg dark:bg-gray-600 dark:text-white focus:outline-none focus:ring focus:border-blue-500"
+                    >
+                        {options.map((option) => (
+                            <option key={option} value={option}>
+                                {option}
+                            </option>
+                        ))}
+                    </select>
+                ) : (
+                    <input
+                        type={type}
+                        id={name}
+                        name={name}
+                        value={value}
+                        onChange={handleInputChange}
+                        readOnly={readOnly}
+                        className={`w-full px-3 py-2 border rounded-lg 
+                            dark:bg-gray-600 dark:text-white 
+                            focus:outline-none focus:ring focus:border-blue-500
+                            ${readOnly ? "bg-gray-100 dark:bg-gray-700 cursor-not-allowed" : ""}
+                            ${errors[name] ? "border-red-500" : ""}
+                        `}
+                    />
+                )}
                 {errors[name] && <p className="text-red-500 text-sm mt-1">{errors[name]}</p>}
             </div>
         </div>
     );
-
-    const handleFlightCancel = async () =>{
-        const cancelRequest = {
-                TraceId: "168529",
-                RequestType: "2",
-                EndUserIp: "103.168.165.86",
-                ClientId: "180130",
-                UserName: "CheapiTr",
-                Password: "CheapiTr@3"
-        }
-
-        try {
-            const response = await axios.post("http://localhost:5000/api/flightcancle", cancelRequest);
-            alert("Booking canceled successfully!");
-            console.log("Cancellation Response:", response.data);
-        } catch (error) {
-            console.error("Cancellation Error:", error);
-            alert("Failed to cancel the booking.");
-        }
-    }
-
 
     return (
         <div className="p-4 lg:p-8 bg-gray-50 dark:bg-gray-800 min-h-screen">
@@ -169,7 +175,7 @@ const EditBookingDetails: React.FC = () => {
                 {/* Header */}
                 <div className="bg-blue-600 dark:bg-blue-800 p-6 text-white">
                     <div className="flex justify-between items-center">
-                        <h2 className="text-2xl font-bold">Edit Booking Details</h2>
+                        <h2 className="text-2xl font-bold">Edit User Booking Details</h2>
                         <button
                             onClick={handleEditToggle}
                             className="flex items-center bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition duration-300"
@@ -184,44 +190,16 @@ const EditBookingDetails: React.FC = () => {
                 <form onSubmit={handleSubmit} className="p-6 space-y-4">
                     <EditableInput
                         icon={User}
-                        label="Passenger Name"
-                        name="passengerName"
-                        value={formData.passengerName}
-                        readOnly={!isEditing}
-                    />
-                    <EditableInput
-                        icon={Plane}
-                        label="Airline"
-                        name="airlineName"
-                        value={`${formData.airlineName} - ${formData.flightNumber}`}
+                        label="Booking ID"
+                        name="bookingId"
+                        value={formData.bookingId}
                         readOnly
                     />
                     <EditableInput
-                        icon={MapPin}
-                        label="Route"
-                        name="route"
-                        value={`${formData.origin} → ${formData.destination}`}
-                        readOnly
-                    />
-                    <EditableInput
-                        icon={Calendar}
-                        label="Departure Time"
-                        name="departureTime"
-                        value={formData.departureTime}
-                        readOnly
-                    />
-                    <EditableInput
-                        icon={Clock}
-                        label="Arrival Time"
-                        name="arrivalTime"
-                        value={formData.arrivalTime}
-                        readOnly
-                    />
-                    <EditableInput
-                        icon={Phone}
-                        label="Contact Number"
-                        name="contactNo"
-                        value={formData.contactNo}
+                        icon={User}
+                        label="Name"
+                        name="name"
+                        value={formData.name}
                         readOnly={!isEditing}
                     />
                     <EditableInput
@@ -232,27 +210,20 @@ const EditBookingDetails: React.FC = () => {
                         readOnly={!isEditing}
                     />
                     <EditableInput
-                        icon={CreditCard}
-                        label="Total Fare"
-                        name="totalFare"
-                        value={`$${formData.totalFare.toFixed(2)}`}
-                        readOnly
+                        icon={Phone}
+                        label="Contact"
+                        name="contact"
+                        value={formData.contact}
+                        readOnly={!isEditing}
                     />
                     <EditableInput
-                        icon={Plane}
-                        label="Booking ID"
-                        name="bookingId"
-                        value={formData.bookingId}
-                        readOnly
+                        icon={Calendar}
+                        label="Booking Status"
+                        name="bookingStatus"
+                        value={formData.bookingStatus}
+                        readOnly={!isEditing}
+                        options={["Active", "Inactive"]}
                     />
-
-                    <button
-                        type="button"
-                        onClick={handleFlightCancel}
-                        className="w-full flex items-center justify-center bg-red-500 hover:bg-red-600 text-white px-4 py-3 rounded-lg transition duration-300"
-                    >
-                        Cancel Booking
-                    </button>
 
                     {isEditing && (
                         <div className="pt-4">
@@ -271,4 +242,4 @@ const EditBookingDetails: React.FC = () => {
     );
 };
 
-export default EditBookingDetails;
+export default UserDetailEdit;
