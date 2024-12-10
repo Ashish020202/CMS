@@ -6,7 +6,8 @@ import { error } from 'console';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import { hotelcancle } from './services/hotelcancleService';
-import {flightcancle} from './services/flightCancleService'
+import {flightcancle} from './services/flightCancleService';
+const couponRoutes = require('./routes/couponRoute');
 
 dotenv.config();
 
@@ -128,7 +129,7 @@ const getFlightBookingResponse = async (req: Request, res: Response): Promise<vo
     bookingStatus: { 
       type: String, 
       enum: ['Active', 'Inactive'], 
-      default: 'Inactive' 
+      default: 'Active' 
   },
 },{ collection: 'users' });
 
@@ -406,6 +407,8 @@ app.post('/api/commissions', async (req:any, res:any) => {
         res.status(400).json({ message: 'Invalid commission values' });
     }
 });
+
+app.use('/api/coupons', couponRoutes);
 
     mongoose.connect(mongoURI)
           .then(async()=>{

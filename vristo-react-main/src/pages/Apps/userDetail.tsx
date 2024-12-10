@@ -6,6 +6,7 @@ type UserBooking = {
     bookingId: number;
     name: string;
     email: string;
+    password:string;
     contact: string;
     bookingStatus: string;
 };
@@ -51,7 +52,7 @@ const UserDetails: React.FC = () => {
                 </div>
 
                 <div className="p-6">
-                    <BookingDetailRow 
+                    {/* <BookingDetailRow 
                         icon={User} 
                         label="Booking ID" 
                         value={booking.bookingId} 
@@ -60,12 +61,17 @@ const UserDetails: React.FC = () => {
                         icon={User} 
                         label="Name" 
                         value={booking.name} 
-                    />
+                    /> */}
                     <BookingDetailRow 
                         icon={Mail} 
                         label="Email" 
                         value={booking.email} 
                     />
+                    <BookingDetailRow 
+                        icon={User} 
+                        label="Password" 
+                        value={booking.password} 
+                    /> 
                     <BookingDetailRow 
                         icon={Phone} 
                         label="Contact" 

@@ -83,23 +83,20 @@ const UserDetailEdit: React.FC = () => {
             return;
         }
 
-        // Set loading state
         
         try {
-            // Make API call to update booking status
             const response = await axios.patch(`http://localhost:5000/api/updatedusers`, {
-                email: formData.email, // Assuming email is the unique identifier
+                email: formData.email, 
                 bookingStatus: formData.bookingStatus
             });
 
-            // Log successful update
+            
             console.log("Updated User Booking Details:", response.data);
 
-            // Reset editing state and loading
+            
             setIsEditing(false);
             
-            // Optional: Show success message or navigate
-            // You might want to add a toast or notification here
+           
         } catch (error) {
             console.error("Error updating booking status:", error);
             // Handle error - show error message to user
@@ -108,7 +105,7 @@ const UserDetailEdit: React.FC = () => {
     };
 
 
-    // Custom input component for consistent styling
+   
     const EditableInput = ({
         icon: Icon,
         label,
@@ -188,20 +185,20 @@ const UserDetailEdit: React.FC = () => {
 
                 {/* Edit Form */}
                 <form onSubmit={handleSubmit} className="p-6 space-y-4">
-                    <EditableInput
+                    {/* <EditableInput
                         icon={User}
                         label="Booking ID"
                         name="bookingId"
                         value={formData.bookingId}
                         readOnly
-                    />
-                    <EditableInput
+                    /> */}
+                    {/* <EditableInput
                         icon={User}
                         label="Name"
                         name="name"
                         value={formData.name}
                         readOnly={!isEditing}
-                    />
+                    /> */}
                     <EditableInput
                         icon={Mail}
                         label="Email"

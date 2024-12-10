@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
+import { Save, Edit, Percent } from 'lucide-react';
 import axios from 'axios';
 
 const Commissions = () => {
-
   const [commissions, setCommissions] = useState([
     {
       id: 'flight',
@@ -17,54 +17,34 @@ const Commissions = () => {
       isEditing: false
     }
   ]);
-  
-  
-  const handleEditClick = (id:any) => {
-    setCommissions(commissions.map(commission => 
-      commission.id === id 
-        ? { ...commission, isEditing: true }
-        : commission
-    ));
+
+  const handleEditClick = () => {
+    setCommissions(commissions.map(commission => ({
+      ...commission,
+      isEditing: true
+    })));
   };
 
-
-  const handleSave = async(id:any) => {
-    setCommissions(commissions.map(commission => 
-      commission.id === id 
-        ? { ...commission, isEditing: false }
-        : commission
-    ));
-    
-   
-    // const updatedCommission:any = commissions.find(c => c.id === id);
-    // console.log(`Updated ${updatedCommission.label}:`, updatedCommission.value + "%");
+  const handleSave = async () => {
     const updatedCommission = {
-      flightCommission:commissions.find(c=>c.id==='flight')?.value,
-      hotelCommission:commissions.find(c=>c.id==='hotel')?.value
+      flightCommission: commissions.find(c => c.id === 'flight')?.value,
+      hotelCommission: commissions.find(c => c.id === 'hotel')?.value
+    };
+
+    try {
+      const response = await axios.post('http://localhost:5000/api/commissions', updatedCommission);
+      console.log('commission res', response.data);
+
+      setCommissions(commissions.map(commission => ({
+        ...commission,
+        isEditing: false
+      })));
+    } catch (error) {
+      console.log('error');
     }
-
-  
-  
-        try{
-          const response =await  axios.post('http://localhost:5000/api/commissions',updatedCommission);
-          console.log('commison res', response.data);
-
-          setCommissions(commissions.map(commission =>
-            commission.id === id
-              ? { ...commission, isEditing: false }
-              : commission
-          ));
-          
-        }catch(error){
-          console.log('errror');
-          
-        }
-
   };
 
-
- 
-  const handleValueChange = (id:any, newValue:any) => {
+  const handleValueChange = (id: string, newValue: string) => {
     setCommissions(commissions.map(commission =>
       commission.id === id
         ? { ...commission, value: Number(newValue) }
@@ -72,69 +52,85 @@ const Commissions = () => {
     ));
   };
 
+  const EditableInput = ({
+    label,
+    id,
+    value,
+    readOnly
+  }: {
+    label: string;
+    id: string;
+    value: number;
+    readOnly: boolean;
+  }) => (
+    <div className="space-y-2">
+      <div className="flex items-center space-x-3">
+        <Percent className="w-5 h-5 text-blue-500 dark:text-blue-400" />
+        <label htmlFor={id} className="text-gray-600 dark:text-gray-300 capitalize font-medium">
+          {label}
+        </label>
+      </div>
+      <div className="flex items-center">
+        <input
+          type="number"
+          id={id}
+          value={value}
+          onChange={(e) => handleValueChange(id, e.target.value)}
+          readOnly={readOnly}
+          min="0"
+          max="100"
+          className={`w-full px-3 py-2 border rounded-lg 
+            dark:bg-gray-600 dark:text-white 
+            focus:outline-none focus:ring focus:border-blue-500
+            ${readOnly ? "bg-gray-100 dark:bg-gray-700 cursor-not-allowed" : ""}`
+          }
+        />
+        <span className="ml-2 text-gray-600 dark:text-gray-300">%</span>
+      </div>
+    </div>
+  );
+
   return (
-    <div className="w-full mx-auto my-2 p-6 bg-white rounded-lg shadow-md">
-      <h2 className="text-2xl font-bold mb-6 text-gray-800">
-        Commission Settings
-      </h2>
-      
-      <div className="space-y-6">
-        {commissions.map(commission => (
-          <div key={commission.id} className="space-y-2">
-            <label className="block text-sm font-medium text-gray-700">
-              {commission.label} (%)
-            </label>
-            
-            <div className="flex items-center space-x-3">
-              <input
-                type="number"
-                value={commission.value}
-                onChange={(e) => handleValueChange(commission.id, e.target.value)}
-                disabled={!commission.isEditing}
-                min="0"
-                max="100"
-                className={`
-                  w-24 px-3 py-2 rounded-md border
-                  focus:outline-none focus:ring-2 focus:ring-blue-500
-                  ${commission.isEditing 
-                    ? 'bg-white border-gray-300' 
-                    : 'bg-gray-100 border-gray-200'
-                  }
-                `}
-              />
-              
-              <span className="text-gray-600">%</span>
-              
-              {commission.isEditing ? (
-                <button 
-                  onClick={() => handleSave(commission.id)}
-                  className="
-                    px-4 py-2 text-sm font-medium text-white
-                    bg-blue-600 rounded-md
-                    hover:bg-blue-700 
-                    focus:outline-none focus:ring-2 focus:ring-blue-500
-                    transition-colors
-                  "
-                >
-                  Save
-                </button>
-              ) : (
-                <button 
-                  onClick={() => handleEditClick(commission.id)}
-                  className="
-                    px-4 py-2 text-sm font-medium text-gray-700
-                    bg-white border border-gray-300 rounded-md
-                    hover:bg-gray-50
-                    focus:outline-none focus:ring-2 focus:ring-blue-500
-                    transition-colors
-                  "
-                >
-                  Edit
-                </button>
-              )}
-            </div>
+    <div className="p-4 lg:p-8 bg-gray-50 dark:bg-gray-800 min-h-screen">
+      <div className="max-w-2xl mx-auto bg-white dark:bg-gray-700 rounded-xl shadow-2xl overflow-hidden">
+        <div className="bg-blue-600 dark:bg-blue-800 p-6 text-white">
+          <div className="flex justify-between items-center">
+            <h2 className="text-2xl font-bold">Commission Settings</h2>
+            <button
+              onClick={handleEditClick}
+              className="flex items-center bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition duration-300"
+              disabled={commissions.some(c => c.isEditing)}
+            >
+              Edit
+              <Edit className="ml-2 w-5 h-5" />
+            </button>
           </div>
-        ))}
+        </div>
+
+        <form className="p-6 space-y-6">
+          {commissions.map(commission => (
+            <EditableInput
+              key={commission.id}
+              label={commission.label}
+              id={commission.id}
+              value={commission.value}
+              readOnly={!commission.isEditing}
+            />
+          ))}
+
+          {commissions.some(c => c.isEditing) && (
+            <div className="pt-4">
+              <button
+                type="button"
+                onClick={handleSave}
+                className="w-full flex items-center justify-center bg-blue-500 hover:bg-blue-600 text-white px-4 py-3 rounded-lg transition duration-300"
+              >
+                <Save className="mr-2 w-5 h-5" />
+                Save Changes
+              </button>
+            </div>
+          )}
+        </form>
       </div>
     </div>
   );

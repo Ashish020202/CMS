@@ -36,6 +36,8 @@
         "highlight.js": "^11.6.0",
         "lucide-react": "^0.468.0",
         "mantine-datatable": "^1.7.17",
+        "moment": "^2.30.1",
+        "node-cron": "^3.0.3",
         "nouislider-react": "^3.4.1",
         "react": "^18.2.0",
         "react-18-image-lightbox": "^5.1.4",
